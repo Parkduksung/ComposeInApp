@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.composeinapp'
+    namespace 'com.dspark.composeinapp'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.composeinapp"
+        applicationId "com.dspark.composeinapp"
         minSdk 24
         targetSdk 33
         versionCode 1
@@ -60,4 +60,6 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
+
+    implementation 'com.android.billingclient:billing:5.1.0'
 }
