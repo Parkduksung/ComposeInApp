@@ -1,4 +1,4 @@
-package com.example.composeinapp.ui.theme
+package com.dspark.composeinapp.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

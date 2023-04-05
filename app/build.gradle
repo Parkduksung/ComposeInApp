@@ -11,8 +11,8 @@ android {
         applicationId "com.dspark.composeinapp"
         minSdk 24
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -62,4 +62,9 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
 
     implementation 'com.android.billingclient:billing:5.1.0'
+}
+dependencies {
+    def billing_version = "5.1.0"
+
+    implementation "com.android.billingclient:billing-ktx:$billing_version"
 }
