@@ -19,7 +19,7 @@
 
     <!-- Composable Text Strings -->
     <string name="basic_sub_text">Basic Subscription</string>
-    <string name="monthly_basic_sub_text">Subscribe1</string>
+    <string name="monthly_basic_sub_text">Daily Sub</string>
     <string name="yearly_sub_text">Yearly Basic Subscription</string>
     <string name="prepaid_basic_sub_text">Prepaid Basic Subscription</string>
     <string name="prepaid_premium_sub_text">Prepaid Premium Subscription</string>

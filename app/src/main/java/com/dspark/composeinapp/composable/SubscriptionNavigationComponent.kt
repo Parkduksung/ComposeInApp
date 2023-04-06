@@ -13,23 +13,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.dspark.composeinapp.Constants
 import com.dspark.composeinapp.Constants.BASIC_BASE_PLANS_ROUTE
-import com.dspark.composeinapp.Constants.MONTHLY_BASIC_PLANS_TAG
-import com.dspark.composeinapp.Constants.MONTHLY_PREMIUM_PLANS_TAG
-import com.dspark.composeinapp.Constants.PREMIUM_BASE_PLANS_ROUTE
+import com.dspark.composeinapp.Constants.Daily_BASIC_PLANS_TAG
 import com.dspark.composeinapp.Constants.PREPAID_BASIC_PLANS_TAG
-import com.dspark.composeinapp.Constants.PREPAID_PREMIUM_PLANS_TAG
 import com.dspark.composeinapp.Constants.SUBSCRIPTION_ROUTE
-import com.dspark.composeinapp.Constants.YEARLY_BASIC_PLANS_TAG
-import com.dspark.composeinapp.Constants.YEARLY_PREMIUM_PLANS_TAG
 import com.dspark.composeinapp.R
 import com.dspark.composeinapp.ui.ButtonModel
 import com.dspark.composeinapp.ui.MainState
@@ -57,12 +50,6 @@ fun SubscriptionNavigationComponent(
                 viewModel = viewModel
             )
         }
-        composable(route = PREMIUM_BASE_PLANS_ROUTE) {
-            PremiumBasePlans(
-                productsForSale = productsForSale,
-                viewModel = viewModel
-            )
-        }
     }
 }
 
@@ -76,9 +63,6 @@ private fun Subscription(
                 ButtonModel(R.string.basic_sub_text) {
                     navController.navigate(route = BASIC_BASE_PLANS_ROUTE)
                 },
-                ButtonModel(R.string.premium_sub_text) {
-                    navController.navigate(route = PREMIUM_BASE_PLANS_ROUTE)
-                }
             )
         }
         ButtonGroup(buttonModels = buttonModels)
@@ -100,57 +84,11 @@ private fun BasicBasePlans(
                         viewModel.buy(
                             productDetails = it,
                             currentPurchases = null,
-                            tag = MONTHLY_BASIC_PLANS_TAG,
+                            tag = Daily_BASIC_PLANS_TAG,
                             activity = activity
                         )
                     }
                 },
-            )
-        }
-        ButtonGroup(buttonModels = buttonModels)
-    }
-}
-
-@Composable
-private fun PremiumBasePlans(
-    productsForSale: MainState,
-    viewModel: MainViewModel,
-) {
-    val context = LocalContext.current
-    val activity = context.findActivity()
-    CenteredSurfaceColumn {
-        val buttonModels = remember(productsForSale, viewModel, activity) {
-            listOf(
-                ButtonModel(R.string.monthly_premium_sub_text) {
-                    productsForSale.premiumProductDetails?.let {
-                        viewModel.buy(
-                            productDetails = it,
-                            currentPurchases = null,
-                            tag = MONTHLY_PREMIUM_PLANS_TAG,
-                            activity = activity
-                        )
-                    }
-                },
-                ButtonModel(R.string.yearly_premium_sub_text) {
-                    productsForSale.premiumProductDetails?.let {
-                        viewModel.buy(
-                            productDetails = it,
-                            currentPurchases = null,
-                            tag = YEARLY_PREMIUM_PLANS_TAG,
-                            activity = activity
-                        )
-                    }
-                },
-                ButtonModel(R.string.prepaid_premium_sub_text) {
-                    productsForSale.premiumProductDetails?.let {
-                        viewModel.buy(
-                            productDetails = it,
-                            currentPurchases = null,
-                            tag = PREPAID_PREMIUM_PLANS_TAG,
-                            activity = activity
-                        )
-                    }
-                }
             )
         }
         ButtonGroup(buttonModels = buttonModels)
@@ -177,9 +115,6 @@ fun UserProfile(
                 when (tag) {
                     PREPAID_BASIC_PLANS_TAG -> ProfileText(
                         text = stringResource(id = R.string.basic_prepaid_sub_message)
-                    )
-                    PREPAID_PREMIUM_PLANS_TAG -> ProfileText(
-                        text = stringResource(id = R.string.premium_prepaid_sub_message)
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))

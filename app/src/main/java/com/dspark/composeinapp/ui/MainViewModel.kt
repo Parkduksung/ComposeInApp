@@ -14,6 +14,7 @@ import com.dspark.composeinapp.billing.BillingClientWrapper
 import com.dspark.composeinapp.repository.SubscriptionDataRepository
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -32,64 +33,43 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         billingClient.startBillingConnection(billingConnectionState = _billingConnectionState)
     }
 
-    val productsForSaleFlows = combine(
-        repo.basicProductDetails,
-        repo.premiumProductDetails,
-    ) { basicProductDetails, premiumProductDetails ->
-        MainState(
-            basicProductDetails = basicProductDetails,
-            premiumProductDetails = premiumProductDetails
-        )
-    }
+    val productsForSaleFlows =
+        repo.basicProductDetails.map {
+            MainState(
+                basicProductDetails = it
+            )
+        }
+
 
     private val userCurrentSubScriptionFlow = combine(
         repo.hasRenewableBasic,
         repo.hasPrepaidBasic,
-        repo.hasRenewablePremium,
-        repo.hasPrepaidPremium
-    ) { hasRenewableBasic,
-        hasPrepaidBasic,
-        hasRenewablePremium,
-        hasPrepaidPremium ->
+    ) {
+            hasRenewableBasic,
+            hasPrepaidBasic,
+        ->
         MainState(
             hasRenewableBasic = hasRenewableBasic,
-            hasPrepaidBasic = hasPrepaidBasic,
-            hasRenewablePremium = hasRenewablePremium,
-            hasPrepaidPremium = hasPrepaidPremium
+            hasPrepaidBasic = hasPrepaidBasic
         )
     }
-
-    val currentPurchasesFlow = repo.purchases
 
     init {
         viewModelScope.launch {
 
             userCurrentSubScriptionFlow.collectLatest { collectedSubscriptions ->
 
-                when{
-                    collectedSubscriptions.hasRenewableBasic == true &&
-                            collectedSubscriptions.hasRenewablePremium == false -> {
+                when {
+                    collectedSubscriptions.hasRenewableBasic == true -> {
                         _destinationScreen.postValue(DestinationScreen.BASIC_RENEWABLE_PROFILE)
                     }
-                    collectedSubscriptions.hasRenewablePremium == true &&
-                            collectedSubscriptions.hasRenewableBasic == false -> {
-                        _destinationScreen.postValue(DestinationScreen.PREMIUM_RENEWABLE_PROFILE)
-                    }
-                    collectedSubscriptions.hasPrepaidBasic == true &&
-                            collectedSubscriptions.hasPrepaidPremium == false -> {
+                    collectedSubscriptions.hasPrepaidBasic == true -> {
                         _destinationScreen.postValue(DestinationScreen.BASIC_PREPAID_PROFILE_SCREEN)
-                    }
-                    collectedSubscriptions.hasPrepaidPremium == true &&
-                            collectedSubscriptions.hasPrepaidBasic == false -> {
-                        _destinationScreen.postValue(
-                            DestinationScreen.PREMIUM_PREPAID_PROFILE_SCREEN
-                        )
                     }
                     else -> {
                         _destinationScreen.postValue(DestinationScreen.SUBSCRIPTIONS_OPTIONS_SCREEN)
                     }
                 }
-
             }
 
         }
@@ -240,8 +220,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         SUBSCRIPTIONS_OPTIONS_SCREEN,
         BASIC_PREPAID_PROFILE_SCREEN,
         BASIC_RENEWABLE_PROFILE,
-        PREMIUM_PREPAID_PROFILE_SCREEN,
-        PREMIUM_RENEWABLE_PROFILE;
     }
 
     companion object {
