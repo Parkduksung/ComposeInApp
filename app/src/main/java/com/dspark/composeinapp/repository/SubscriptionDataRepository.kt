@@ -39,7 +39,7 @@ class SubscriptionDataRepository(billingClientWrapper: BillingClientWrapper) {
 
     companion object {
         // List of subscription product offerings
-        private const val BASIC_SUB = "sub_3"
+        private const val BASIC_SUB = "sub_4"
     }
 
 }

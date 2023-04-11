@@ -191,7 +191,7 @@ class BillingClientWrapper(
         private const val TAG = "결과"
 
         // List of subscription product offerings
-        private const val BASIC_SUB = "sub_3"
+        private const val BASIC_SUB = "sub_4"
 
         private val LIST_OF_PRODUCTS = listOf(BASIC_SUB)
     }
